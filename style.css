@@ -1,0 +1,298 @@
+
+
+/*EN GENERAL*/
+
+/* Je vais créer la couleur de fond sur l'ensemble*/
+main {
+    background-color: #d0e7de;
+}
+
+
+
+/* Pour centrer mon contenu */
+.content {
+    width: 960px;
+    height: auto;
+    margin: 0 auto;
+
+
+}
+
+
+/*Donne les caractéristique de la police lors des liens */
+a {
+    text-decoration: none;/*permet d'enlever la couleur bleu et la ligne sur le lien*/
+    color: #679181;/*color donne la couleur */
+
+}
+
+p {
+    text-align: justify;/* le texte va prendre le plus d'espace possible */
+    font-family: 'Gotu', sans-serif;/* la police choisie*/
+    font-size: 16px;/* la taille de la police*/
+    font-weight: 400; /* permet de choisir la graisse de la police*/
+    color: #679181;
+
+}
+
+
+.col {
+    float: left; /* permet de faire flotter les colonnes une à coté des autres*/
+    margin-right: 20px;/* détermine l'espace entre les colonnes*/
+}
+
+.last {
+    margin-right: 0 !important;/* Pour que la dernière colonne se mette à l'extrème droite sans laisser d'espace contrairement aux autres colonnes. !important prend la priorités*/
+}
+
+.clear {
+    clear: both; /* Pour stopper le flottement */
+}
+/* Pour que l'image occupe le maximum de place qui lui est autorisé*/
+img {
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+/*HEADER*/
+
+/*Le background est une image et j'ai décidé de lui donner une hauteur de 150px et pas de largeur, la largeur occupe toute la page*/
+header {
+    background: url('asset/nordwood-themes-KcsKWw77Ovw-unsplash.jpg');
+    height: 150px;
+
+}
+
+
+
+/*NAVIGATION*/
+
+/*La navigation est placée sur l extrémité droite du "content" et à hauteur du h2. On utilise le margin-left pour l aligner sur la largeur et le top pour l'aligner sur la hauteur*/
+nav {
+    position: absolute;
+    top: 100px;
+    margin-left: 150px;
+
+
+}
+
+
+nav ul {
+    list-style: none;/* Je décide de ne pas mettre de style à ma liste */
+
+}
+
+nav ul li {
+    display: inline;/* Pour que ma navigation soit en ligne*/
+    font-size: 20px;
+    font-family: 'Gotu', sans-serif;
+    font-weight: 200;
+    position: relative;
+    padding-left: 10px;/* un écarte de 10px entre les éléments*/
+
+}
+
+/*Je choisis de créer un petit rectangle de 10 px pour ma classe current
+Pour les classes on utilisera toujours un . devant le nom de la classe*/
+.current {
+    background: #679181;
+    padding: 10px;
+
+}
+
+/* Permet de choisir la couleur du a au survol*/
+.current a {
+    color: #ffffff;
+}
+
+
+/*TITRES*/
+
+h1 {
+    width: 200px;
+    height: 80px;
+    font-weight: 900;
+    font-family: 'Amatic SC', cursive;
+    background-color: #679181;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;/* Permet de placer le texte au centre*/
+    text-transform: capitalize;/* Permet de mettre la première lettre en majuscule et le reste en minuscule*/
+    left: 0;/* Pour placer l'élément à droite*/
+
+
+}
+
+span {
+    font-size: 70px;
+    font-family: 'Amatic SC', cursive;
+    font-style: italic;/*Mettre le mot en italique*/
+    font-weight: 900;
+    text-transform: uppercase;/*Mettre tout le mot en majuscule*/
+
+}
+h1 a{
+    color: #ffffff;
+}
+
+h2 {
+    width: 200px;
+    height: 60px;
+    color: #679181;
+    font-family: 'Amatic SC', cursive;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+    font-weight: 800;
+    text-align: center;
+    text-transform: capitalize;
+    left: 0;
+    margin-top: 0.005px;
+
+
+}
+
+
+h3 {
+    font-size: 20px;
+    font-family: 'Gotu', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #679181;
+    padding: 20px;
+
+}
+
+
+td{
+    width: 150px;
+    height: 30px;
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Gotu', sans-serif;
+    padding: 15px;
+    color: #679181;
+}
+/*COLONES*/
+
+.col-1-12 {
+    width: 60px;
+
+}
+
+.col-3-12 {
+    width: 225px;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.col-5-12 {
+    width: 380px;
+
+}
+
+
+.col-5-12 p {
+    text-align: left;
+    font-size: 15px;
+    font-weight: 300;
+    font-family: 'Mogra', cursive;
+    color: #679181;
+
+}
+
+
+
+.col-6-12 {
+    width: 470px;
+    text-align: center;
+
+
+}
+
+
+/*ACCUEIL*/
+
+/* J'utilise la classe présentation pour donner des propriétés particulières à cette image seulement*/
+.presentation {
+    height: 300px;
+    width: 300px;
+    margin-left: 86px;
+    margin-top: -30px;
+    margin-bottom: 35px;
+
+
+}
+
+
+/*FORMULAIRE*/
+
+
+input {
+    height: 20px;
+    width: 230px;
+    margin: 15px;
+    margin-right: 47px;
+    box-sizing:content-box;/* permet que le input soit considéré comme une boite de haut en bas*/
+    border: 2px solid; /* Pour mettre une ligne qui entoure l'ensemble */
+    border-radius: 4px;/* radius permet de donner un arrondi sur les bords */
+    border-color: #679181;
+    margin-top: -3px;
+
+}
+
+.form-group{
+    margin-left: 0;
+}
+
+.left{
+    margin-left:0;
+}
+
+
+label {
+    display: block;/* Pour montrer que la balise est en bloc et non en ligne*/
+    width: 150px;
+    float: left;
+    color: #679181;
+    font-size: 18px;
+    font-family: 'Mukta', sans-serif;
+
+
+}
+
+textarea{
+    box-sizing:content-box;
+    border: 2px solid;
+    border-radius: 4px;
+    border-color: #679181;
+    font-size: 18px;
+    font-family: 'Mukta', sans-serif;
+    margin-right: 30px;
+
+
+}
+.submit {
+    width: 100px;
+    right: 0;
+    margin-left: 252px;
+    background-color: #ffff;
+    color: #679181;
+    margin-top: 15px;
+}
+
+/*FOOTER*/
+
+footer {
+    height: 80px;
+    background-color: #f1f1f3;
+
+}
+
+footer p {
+    text-align: right;/*Aligner le texte sur la droite*/
+    color: #679181;
+    vertical-align: middle;/* pour centrer le contenu sur la hauteur*/
+    line-height: 80px;
+}
