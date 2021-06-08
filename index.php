@@ -1,14 +1,13 @@
 <?php
-// connection à la base de données
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-// Pour pouvoir afficher les erreurs sql , on ne peut le faire que dans le cadre du développement
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// on fait appel à la connection-DB.php pour se connecter
+include 'connection-DB.php';
 
 // Definition des constantes et variables
 if(isset($_POST['login']) && isset($_POST['password'])){
 
     $user= $_POST['login'];
     $password=$_POST['password'];
+    $regex="#[0-9]#"; // Pour contenir au minimum 1 chiffre.
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 }
@@ -16,8 +15,10 @@ if(isset($_POST['login']) && isset($_POST['password'])){
 
 // Test de l'envoi du formulaire
 if(!empty($_POST)) {
-    // Les identifiants sont transmis ?
-    if (!empty($_POST['login']) && !empty($_POST['password'])) // on vérifie si le login appartient à la base de données.
+    // Les identifiants sont ils transmis? Le login doit contenir au minimum un chiffre
+    if ((!empty($_POST['login'])&& preg_match( $regex, $user))
+        && !empty($_POST['password']))
+        // on vérifie si le login appartient à la base de données.
     {
         // on prepare la requête pour éviter toutes injections sql
         $request = $bdd->prepare('SELECT * FROM `utilisateurs`WHERE `login`=:login');

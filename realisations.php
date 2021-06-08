@@ -1,21 +1,23 @@
 <?php
 // POUR DEMARRER ET CONNECTER LA SESSION A LA BASE DE DONNEES.
-
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 session_start();
+include 'connection-DB.php';
 // LE CRUD
-
-$action= 'read';
-
-if (isset($_GET['action'])){
-    $action = $_GET['action'];
+if (isset($_SESSION['login'])) {
+    $action= 'read';
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    }
 }
-$content= '';
+//**********************************************CRUD*******************************
 
-$content= '';
+
+ if (isset($_GET['action'])){
+    $action = $_GET['action'];
+ }
+ $content= '';
 // Pour lire les données de la base de données
-if ($action == 'read') {
+ if ($action == 'read') {
     if (isset($_GET['titre'])) { // on selectionne la table et on dit ou on doit chercher
         $request = $bdd->prepare('SELECT * FROM `realisations` WHERE `titre` =:titre');
         $request->bindParam('titre', $_GET['titre']);
@@ -29,7 +31,7 @@ if ($action == 'read') {
 
 
   // Pour créer une nouvelle réalisation et l'insérer dans la base de données.
-}else if ($action == 'create') {
+ }else if ($action == 'create') {
     if (isFormSubmit()) { // on vérifie que le formulaire est envoyé
         if (isFormValid()) { // on vérifie que le formulaire est valide
             $filePath = uploadFile(); // pour appeler la fonction upload
@@ -56,7 +58,7 @@ if ($action == 'read') {
     $content = getForm( null); // si il y a une erreur on repropose le formulaire
 
  // Pour supprimer via l'id de la réalisation
-}else if ($action == 'delete') {
+ }else if ($action == 'delete') {
     if (!isset($_GET['id'])) {
         http_response_code(400);// si l id n'est pas validé + possible de retour
         $content = 'Mauvaise requête, impossible de supprimer sans avoir un id. <a href="realisations.php">Retour à la liste</a>';
@@ -73,7 +75,7 @@ if ($action == 'read') {
     }
 
     // Pour apporter des modifications à une réalisations déjà encodée.
-}else if ($action == 'update') {
+ }else if ($action == 'update') {
     if (!isset($_GET['id'])) {// il faut aussi un id
         http_response_code(400);
         $content = 'Mauvaise requête, impossible de mettre à jour sans avoir un id. <a href="realisations.php">Retour à la liste</a>';
@@ -112,9 +114,9 @@ if ($action == 'read') {
         }
     }
 
-}
+ }
 
-// TOUTES LES FONCTIONS
+//**********************************************FONCTIONS*******************************
 
 //Fonction pour afficher la table avec les valeurs de la base de données
     function getTable($lines)
@@ -281,7 +283,7 @@ function getServiceMessage() {
 
 
 
-// POUR AFFICHER LE CONTENU
+//**********************************************AFFICHAGE*******************************
 
 
 echo '<html lang="fr">

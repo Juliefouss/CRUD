@@ -1,8 +1,7 @@
 <?php
 // pour que la session soit ouverte
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+include 'connection-DB.php';
 
 // une fonction pour créer une navigation avec des redirection vers les différentes pages.
 function getNav(){

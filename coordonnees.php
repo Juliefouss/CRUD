@@ -1,19 +1,25 @@
 <?php
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$_SESSION['login'];
-// pour afficher les données de la table par défaut
-$action= 'read';
-
-if (isset($_GET['action'])){
-    $action = $_GET['action'];
+include 'connection-DB.php';
+// pour vérifier que les utilisateurs sont bien connectés
+if (isset($_SESSION['login'])) {
+    $action= 'read';
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    }
 }
-$content= '';// pour pouvoir changer le contenu en fonction de l'action choisie
+
+//**********************CRUD***********************************************
+
+ $action= 'read'; // pour afficher les données de la table par défaut
+
+ if (isset($_GET['action'])){
+    $action = $_GET['action'];
+ }
+ $content= '';// pour pouvoir changer le contenu en fonction de l'action choisie
 
 // Pour afficher les données de la table
-if ($action == 'read'){
+ if ($action == 'read'){
     if (isset($_GET['prenom'])) {// on fait une recherche par le prénom
         // on prépare la requete de la table coordonnées pour éviter les injections sql
         $request= $bdd->prepare ('SELECT * FROM `coordonnees` WHERE `prenom` =:prenom');
@@ -27,7 +33,7 @@ if ($action == 'read'){
     $content = getTable($lines);// pour afficher toutes les lignes de la table
 
 // Pour créer une nouvelle personnes avec des coordonnées
-}else if ($action == 'create') {
+ }else if ($action == 'create') {
     if (isFormSubmit()) {// on vérifie que le formulaire est envoyé
         if (isFormValid()) { // on vérifie que le formulaire est valide.
             $request = $bdd->prepare('INSERT INTO `coordonnees` (`nom`, `prenom`, `adresse`,`mail` )VALUES  (:nom, :prenom, :adresse , :mail)');
@@ -47,8 +53,7 @@ if ($action == 'read'){
 
     }
     $content = getForm(null); //  si ce n'est pas valide, on affiche une nouvelle fois le formulaire.
-}
-else if ($action =='delete'){ // pour supprimer une ligne de la table
+ }else if ($action =='delete'){ // pour supprimer une ligne de la table
     if(!isset ($_GET['id'])){ // on supprime par l'id de la ligne
         http_response_code(400);// mauvaise requête on propose d aller vers la page en cliquant sur retour
         $content= 'Mauvaise requête, il faut sélectionner un id <a href="coordonnees.php">Retour</a>';
@@ -62,9 +67,9 @@ else if ($action =='delete'){ // pour supprimer une ligne de la table
             die();
         }
     }
-}
+ }
 // Pour mettre à jour la ligne de la table, cela se réalise également par l'id.
-else if ($action =='update'){
+ else if ($action =='update'){
     if (!isset ($_GET['id'])){
         http_response_code(400);
         $content= 'Il faut choisir la personne que vous voulez modifier <a href="coordonnees.php">Retour</a>';
@@ -98,61 +103,10 @@ else if ($action =='update'){
         }
 
     }
-}
+ }
 
 
-
-
-
-
-echo '<html lang="fr">
-
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Julie Fouss Webdevelopper Portfolio</title>
-	<link rel="stylesheet" href="style.css">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" realisationsrel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Mogra&display=swap" rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Gotu&display=swap" rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Mogra&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-  
-      
-</head>
-<body>
-	<main>
-		<header>
-			<div class="content">
-				<h1>
-				<a href="home.php"><span>jf</span> Webdevelopper</a></h1>
-				<h2>Julie Fouss</h2>
-			</div>
-		</header>
-		<section>
-		<div class="content">';
-echo getNav();
-
-$message = getServiceMessage();
-if ($message) {
-    echo '<div class="alert alert-primary" role="alert">
-        '.$message.'
-</div>';
-}
-echo $content;
-echo'
-</div>
-</section>
-</main>
-</body>
-</html>';
-
-
+//**********************FONCTIONS***********************************************
 function getTable($lines)
 {
     $table= '<h3>Coordonnées</h3>';
@@ -238,7 +192,7 @@ function isFormValid() : bool {
         && !empty($_POST['mail']);
 }
 
-//FONCTION POUR AFFICHER DES MESSAGES
+//fonction pour afficher les messages
 
 function writeServiceMessage($message) {
     $_SESSION['serviceMessage'] = $message;
@@ -253,3 +207,51 @@ function getServiceMessage() {
 
     return $message;
 }
+
+//**********************AFFICHAGE***********************************************
+echo '<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Julie Fouss Webdevelopper Portfolio</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" realisationsrel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Mogra&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Gotu&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Mogra&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  
+      
+</head>
+<body>
+	<main>
+		<header>
+			<div class="content">
+				<h1>
+				<a href="home.php"><span>jf</span> Webdevelopper</a></h1>
+				<h2>Julie Fouss</h2>
+			</div>
+		</header>
+		<section>
+		<div class="content">';
+echo getNav();
+
+$message = getServiceMessage();
+if ($message) {
+    echo '<div class="alert alert-primary" role="alert">
+        ' . $message . '
+</div>';
+}
+echo $content;
+echo '
+</div>
+</section>
+</main>
+</body>
+</html>';

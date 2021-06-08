@@ -1,7 +1,6 @@
 <?php
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+include 'connection-DB.php';
 
 if (isset( $_POST['password'])){
     $password = $_POST['password'];
@@ -9,7 +8,6 @@ if (isset( $_POST['password'])){
 }
 
 
-//CRUD
 $action= 'read';
 
 if (isset($_GET['action'])){
@@ -17,6 +15,7 @@ if (isset($_GET['action'])){
 }
 $content= '';
 
+//**********************CRUD***********************************************
 if ($action == 'read'){
     if (isset($_GET['nom'])) {
         $request= $bdd->prepare ('SELECT * FROM `utilisateurs` WHERE `nom` =:nom');
@@ -111,7 +110,7 @@ else if ($action =='update'){
 
 
 
-//FONCTIONS
+//**********************FONCTIONS***********************************************
 
 function getTable($lines)
 {
@@ -169,7 +168,7 @@ function getForm($utilisateurs): string
     <input type="email" name="mail"   value="'.($utilisateurs ? $utilisateurs['mail'] : '').'" required> 
 </div>
 <div class="form-group">
-    <label for="login">Login</label>
+    <label for="login">Login ( votre login doit contenir au minimum 1 chiffre)</label>
     <input type="text" name="login"  value="'.($utilisateurs ? $utilisateurs['login'] : '').'" required> 
 </div>    
  <div class="form-group">
@@ -185,18 +184,20 @@ function getForm($utilisateurs): string
 }
 
 
-function isFormSubmit() : bool {
+function isFormSubmit() {
     return isset($_POST['nom']); // Je ne fais que sur le titre car le formulaire est complété et envoyé
 }
 // On va créer une fonction pour vérifié la validité du formulaire
-function isFormValid() : bool {
+function isFormValid() {
+    $regex ="#[0-9]#";
+    $user = $_POST['login'];
     return
         !empty($_POST['nom'])
         && !empty($_POST['prenom'])
         && !empty($_POST['adresse'])
         && !empty($_POST['phone'])
         && !empty($_POST['mail'])
-        && !empty($_POST['login'])
+        && !empty($_POST['login'] && preg_match($regex, $user))
         && !empty($_POST['password']);
 }
 
@@ -232,7 +233,7 @@ function getNav(){
 }
 
 
-//AFFICHAGE
+//**********************AFFICHAGE***********************************************
 
 echo '<html lang="fr">
 

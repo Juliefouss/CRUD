@@ -1,17 +1,22 @@
 <?php
 
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=script-server-06-21;charset=utf8', 'root', '');
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+include 'connection-DB.php';
 
-$action = 'read';
-
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
+if (isset($_SESSION['login'])) {
+    $action= 'read';
+    if (isset($_GET['action'])) {
+        $action = $_GET['action'];
+    }
 }
-$content = '';
+//**********************CRUD***********************************************
 
-if ($action == 'read') {
+ if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+ }
+ $content = '';
+
+ if ($action == 'read') {
     if (isset($_GET['nom'])) {
         $request = $bdd->prepare('SELECT * FROM `competences` WHERE `nom` =:nom');
         $request->bindParam('nom', $_GET['nom']);
@@ -23,7 +28,7 @@ if ($action == 'read') {
     $lines = $request->fetchAll();
     $content = getTable($lines);
 
-} else if ($action == 'create') {
+ } else if ($action == 'create') {
     if (isFormSubmit()) {
         if (isFormValid()) {
             $request = $bdd->prepare('INSERT INTO `competences` (`nom`, `pourcentage`, `level1` , `level2`,`level3`, `level4`, `level5`)VALUES  (:nom, :pourcentage,:level1, :level2, :level3, :level4, :level5)');
@@ -37,7 +42,7 @@ if ($action == 'read') {
                 'level5' => $_POST['level5']
             ];
             if ($request->execute($params)) {
-                writeServiceMessage('Merci '.$_POST['nom'].' a été ajoutée');
+                writeServiceMessage('Merci ' . $_POST['nom'] . ' a été ajoutée');
                 header('location:competences.php');
                 die(); // pas besoin  de le rediriger vers le formulaire puisque c'est déjà ce qui se passe donc on met un die
             }
@@ -46,7 +51,7 @@ if ($action == 'read') {
 
     }
     $content = getForm(null);
-} else if ($action == 'delete') {
+ } else if ($action == 'delete') {
     if (!isset ($_GET['id'])) {
         http_response_code(400);// mauvaise requête
         $content = 'Mauvaise requête, il faut sélectionner un id <a href="competences.php">Retour</a>';
@@ -54,12 +59,12 @@ if ($action == 'read') {
         $request = $bdd->prepare('DELETE FROM `competences` WHERE `id`=:id');
         $params = ['id' => $_GET['id']];
         if ($request->execute($params)) {
-            writeServiceMessage('compétence'.$_POST['nom'].' a été supprimée');
+            writeServiceMessage('compétence' . $_POST['nom'] . ' a été supprimée');
             header('location:competences.php');
             die();
         }
     }
-} else if ($action == 'update') {
+ } else if ($action == 'update') {
     if (!isset ($_GET['id'])) {
         http_response_code(400);
         $content = 'Il faut choisir la réalisation à modifier <a href="competences.php">Retour</a>';
@@ -78,7 +83,7 @@ if ($action == 'read') {
                     'level5' => $_POST['level5']
                 ];
                 if ($request->execute($params)) {
-                    writeServiceMessage('Merci '.$_POST['nom'].' a été mise à jour');
+                    writeServiceMessage('Merci ' . $_POST['nom'] . ' a été mise à jour');
                     header('location:competences.php');
                     die();
                 }
@@ -96,7 +101,9 @@ if ($action == 'read') {
         }
 
     }
-}
+ }
+
+//**********************FONCTIONS***********************************************
 
 function getTable($lines)
 {
@@ -126,7 +133,7 @@ function getTable($lines)
 
 }
 
-function getForm($competences): string
+function getForm($competences)
 {
 
     $form = '
@@ -192,13 +199,13 @@ function getForm($competences): string
 }
 
 
-function isFormSubmit(): bool
+function isFormSubmit()
 {
     return isset($_POST['nom']); // Je ne fais que sur le titre car le formulaire est complété et envoyé
 }
 
 // On va créer une fonction pour vérifié la validité du formulaire
-function isFormValid(): bool
+function isFormValid()
 {
     return
         !empty($_POST['nom'])
@@ -212,11 +219,13 @@ function isFormValid(): bool
 
 //FONCTION POUR AFFICHER DES MESSAGES
 
-function writeServiceMessage($message) {
+function writeServiceMessage($message)
+{
     $_SESSION['serviceMessage'] = $message;
 }
 
-function getServiceMessage() {
+function getServiceMessage()
+{
     $message = null;
     if (isset($_SESSION['serviceMessage'])) {
         $message = $_SESSION['serviceMessage'];
@@ -248,6 +257,9 @@ function getNav()
     return $nav;
 
 }
+
+//**********************HTML***********************************************
+
 echo '<html lang="fr">
 
 <head>
