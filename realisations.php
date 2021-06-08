@@ -239,9 +239,13 @@ function isFormValid() : bool {
             $infosfichier = pathinfo($_FILES['image']['name']);
             $extension_upload = $infosfichier['extension'];
             $extensions_autorisees= array('jpg','jpeg', 'gif', 'png');
-        }elseif ($_FILES['image']['error'] == 1){
+            if (!in_array($extensions_autorisees, $extension_upload)){
+                writeServiceMessage("Seulement ".implode(", ", $extensions_autorisees). " est autorisé");
+                $valid=false;
+            }
+        }else if ($_FILES['image']['error'] == 1){
         $valid = false;
-        $extensions_autorisees =$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
         writeServiceMessage("Seulement ".implode(", ", $extensions_autorisees). " est autorisé");
 
     }
