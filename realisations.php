@@ -238,16 +238,15 @@ function isFormValid() : bool {
             }
             $infosfichier = pathinfo($_FILES['image']['name']);
             $extension_upload = $infosfichier['extension'];
+            $extensions_autorisees= array('jpg','jpeg', 'gif', 'png');
         }elseif ($_FILES['image']['error'] == 1){
         $valid = false;
-        $extensions_autorisees =$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');;
+        $extensions_autorisees =$extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
         writeServiceMessage("Seulement ".implode(", ", $extensions_autorisees). " est autorisé");
 
     }
         return $valid;
     }
-
-
 
 
 
